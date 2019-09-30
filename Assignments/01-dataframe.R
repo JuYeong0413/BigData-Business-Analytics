@@ -1,0 +1,28 @@
+##########################################
+# 과목명 : 빅데이터와 비즈니스 애널리틱스#
+# 과제명 : 1 - 데이터구조 파악           #  
+# 이름 : 이주영                          #
+# 학번 : 2016111540                      #
+# 학과 : 경영학부                        #
+##########################################
+
+# 1번, 2번 문제
+# 모스부호 - ●
+글자 <- c("SOS", "GO", "HELP", "ME", "JY")
+모스부호 <- c("●●● --- ●●●", "--● ---", "●●●● ● ●-●● ●--●", "-- ●","●--- -●--")
+부호개수 <- c(9, 6, 11, 3, 8)
+난이도 <- factor(c("LOW", "LOW", "HIGH", "LOW", "LOW"), levels = c("HIGH", "LOW"))
+LO <- c(TRUE, TRUE, FALSE, TRUE, TRUE)
+morsecode <- data.frame(글자, 모스부호, 부호개수, 난이도, LO, stringsAsFactors = FALSE)
+
+View(morsecode)
+
+# 3번 문제
+View(morsecode[c(2,5), c(1,2)])
+
+# 4번 문제
+barplot(morsecode$부호개수,
+     main = "모스부호 개수",
+     xlab = "글자",
+     ylab = "부호개수",
+     col = c("#5004fc", "blue", "cyan", "green", "yellow"))
