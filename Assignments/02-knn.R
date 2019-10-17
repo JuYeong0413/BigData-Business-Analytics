@@ -64,25 +64,60 @@ CrossTable(x = credit_test_labels, y = credit_test_pred, prop.chisq=FALSE)
 ##########################################################
 #################### 보너스  #############################
 ##########################################################
+# k를 1부터 훈련데이터 개수의 제곱근(63)까지 넣어보며 최적의 k값을 찾아낸다.
 # k를 변경한 실험결과
-# k=1부터 k=30까지의 결과를 확인해봤을 때, k=8에서 가장 좋은 결과가 나온다.
-credit_test_pred <- knn(train = credit_train, test = credit_test, cl = credit_train_labels, k=8)
+result <- numeric()
+k = 1:63
+for(i in k ) {
+  credit_pred <- knn(credit_train, credit_test, credit_train_labels, k=i)
+  t <- table(credit_pred, credit_test_labels)
+  result[i-4] <- (t[1,1]+t[2,2])/sum(t)
+}
+
+k_value <- which(result==max(result))
+k_value # 최적의 k값
+
+credit_test_pred <- knn(train = credit_train, test = credit_test, cl = credit_train_labels, k=k_value)
 CrossTable(x = credit_test_labels, y = credit_test_pred, prop.chisq=FALSE)
 
 # 정규화
 normalize <- function(x) {
-  return((x - min(x)) / (max(x) - min(x)))
+  return ((x - min(x)) / (max(x) - min(x)))
 }
 
-credit_n <- as.data.frame(lapply(credit[2:25], normalize))
-summary(credit_n$LIMIT_BAL)
+credit_n <- as.data.frame(lapply(credit[,-c(1, 3, 4, 5, 13, 14, 15, 16, 17, 18, 25)], normalize))
 
-credit_n_test_pred <- knn(train = credit_train, test = credit_test, cl = credit_train_labels, k=10)
+credit_n_train <- credit_n[1:6000, ]
+credit_n_test <- credit_n[6001:10000, ]
+
+result_n <- numeric()
+for(i in k ) {
+  credit_n_pred <- knn(credit_n_train, credit_n_test, credit_train_labels, k=i)
+  t_n <- table(credit_n_pred, credit_test_labels)
+  result_n[i-4] <- (t_n[1,1]+t_n[2,2])/sum(t_n)
+}
+
+k_n <- which(result_n==max(result_n))
+k_n # 정규화를 이용했을 때 최적의 k값
+
+credit_n_test_pred <- knn(train = credit_n_train, test = credit_n_test, cl = credit_train_labels, k=k_n)
 CrossTable(x = credit_test_labels, y = credit_n_test_pred, prop.chisq=FALSE)
 
 # 표준화
-credit_z <- as.data.frame(scale(credit[-1]))
-summary(credit_z$LIMIT_BAL)
+credit_z <- as.data.frame(scale(credit[-25]))
 
-credit_z_test_pred <- knn(train = credit_train, test = credit_test, cl = credit_train_labels, k=1)
+credit_z_train <- credit_z[1:6000, ]
+credit_z_test <- credit_z[6001:10000, ]
+
+result_z <- numeric()
+for(i in k ) {
+  credit_z_pred <- knn(credit_z_train, credit_z_test, credit_train_labels, k=i)
+  t_z <- table(credit_z_pred, credit_test_labels)
+  result_z[i-4] <- (t_z[1,1]+t_z[2,2])/sum(t_z)
+}
+
+k_z <- which(result_z==max(result_z))
+k_z # 표준화를 이용했을 때 최적의 k값
+
+credit_z_test_pred <- knn(train = credit_z_train, test = credit_z_test, cl = credit_train_labels, k=k_z)
 CrossTable(x = credit_test_labels, y = credit_z_test_pred, prop.chisq=FALSE)
