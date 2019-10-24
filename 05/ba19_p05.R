@@ -5,6 +5,8 @@
 ## Example: Identifying Risky Bank Loans ----
 ## Step 1: Exploring the data ----
 credit <- read.csv("credit.csv")
+head(credit)
+View(credit)
 str(credit)
 
 # look at two characteristics of the applicant
@@ -23,22 +25,24 @@ table(credit$default)
 # use set.seed to use the same random number sequence as the tutorial
 RNGversion("3.5.2");set.seed(123)
 ######### code 1
-
+train_sample <- sample(1000, 900)
 str(train_sample)
 
 # split the data frames
 credit_train <- credit[train_sample, ]
 ######### code 2
-
+credit_test <- credit[-train_sample, ]
 # check the proportion of class variable
 prop.table(table(credit_train$default))
 prop.table(table(credit_test$default))
 
 ## Step 3: Training a model on the data ----
 # build the simplest decision tree
+install.packages("C50")
 library(C50)
 ######### code 3
-
+credit_model <- C5.0(credit_train[-17],
+                     credit_train$default)
 # display simple facts about the tree
 credit_model
 
@@ -48,10 +52,12 @@ summary(credit_model)
 ## Step 4: Evaluating model performance ----
 # create a factor vector of predictions on test data
 ######### code 4
-
+credit_pred <- predict(credit_model, credit_test)
+head(credit_pred)
 # cross tabulation of predicted versus actual classes
 library(gmodels)
 CrossTable(######### code 5
+           credit_test$default, credit_pred,
            prop.chisq = FALSE, prop.c = FALSE, prop.r = FALSE,
            dnn = c('actual default', 'predicted default'))
 
@@ -64,7 +70,7 @@ credit_boost10 <- C5.0(credit_train[-17], credit_train$default,
 credit_boost10
 summary(credit_boost10)
 
-credit_boost_pred10 <- ######### code 6
+credit_boost_pred10 <- predict(credit_boost10, credit_test) ######### code 6
 CrossTable(credit_test$default, credit_boost_pred10,
            prop.chisq = FALSE, prop.c = FALSE, prop.r = FALSE,
            dnn = c('actual default', 'predicted default'))
@@ -88,7 +94,7 @@ names(matrix_dimensions) <- c("predicted", "actual")
 matrix_dimensions
 
 # build the matrix
-error_cost <- ######### code 7
+error_cost <- matrix(c(0, 1, 4, 0 ), nrow = 2, dimnames = matrix_dimensions) ######### code 7
 error_cost
 
 # apply the cost matrix to the tree
