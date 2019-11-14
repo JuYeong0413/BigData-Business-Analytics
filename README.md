@@ -7,4 +7,5 @@
 3. knn  
 4. Naive Bayes  
 5. 분할과 정복  
-6. 블랙박스 기법 - 신경망 분석  
+6. 신경망(Neuralnet) 분석  
+7. SVM(Support Vector Machine)  
