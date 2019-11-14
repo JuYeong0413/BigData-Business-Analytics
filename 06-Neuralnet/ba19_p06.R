@@ -8,7 +8,7 @@
 
 ####### Step 2. Exploring and preparing the data 
 # 데이터 읽기와 구조 확인
-concrete <- read.csv("concrete.csv") ####CODE####
+concrete <- read.csv("concrete.csv")
 str(concrete)
 View(concrete)
 
@@ -32,14 +32,13 @@ concrete_test <- concrete_norm[774:1030, ]
 
 ####### Step 3. Training a model on the data
 # neuralnet 모델 훈련
-####CODE####
 install.packages("neuralnet")
 library(neuralnet)
 
 set.seed(12345)
 
 # 하나의 은닉 뉴런에 대한 단순한 ANN
-concrete_model <- neuralnet(strength ~ cement + slag + ash + water + superplastic + coarseagg + fineagg + age, data = concrete_train) ####CODE####
+concrete_model <- neuralnet(strength ~ cement + slag + ash + water + superplastic + coarseagg + fineagg + age, data = concrete_train)
 
 
 # 망(network) 시각화
@@ -52,7 +51,7 @@ plot(concrete_model)
 model_results <- compute(concrete_model, concrete_test[1:8])
 
 # 강도값을 예측하기 위하여 결과값만 받아서 진행 
-predicted_strength <- model_results$net.result ####CODE####
+predicted_strength <- model_results$net.result
 
 # 예측값과 실제값간의 상관 관계 확인
 # 결과 값이 다양하게 측정됨(매번 다르게 측정)
@@ -74,5 +73,5 @@ plot(concrete_model2)
 
 # 결과 평가
 model_results2 <- compute(concrete_model2, concrete_test[1:8])
-predicted_strength2 <- model_results2$net.result ####CODE####
+predicted_strength2 <- model_results2$net.result
 cor(predicted_strength2, concrete_test$strength)
