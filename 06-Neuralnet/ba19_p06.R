@@ -13,7 +13,7 @@ str(concrete)
 View(concrete)
 
 #  정규화 함수
-normalize <- function(x) { ####CODE####
+normalize <- function(x) {
     return((x - min(x)) / (max(x) - min(x)))
 }
 
