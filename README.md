@@ -9,3 +9,4 @@
 5. 분할과 정복  
 6. 신경망(Neuralnet) 분석  
 7. SVM(Support Vector Machine)  
+8. Ensemble  
