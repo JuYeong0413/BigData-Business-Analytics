@@ -28,7 +28,7 @@ normalize <- function(x) {
   return((x - min(x)) / (max(x) - min(x)))
 }
 
-credit_norm <- as.data.frame(lapply(credit[,-c(25)], normalize))
+credit_norm <- as.data.frame(lapply(credit_rand[,-c(25)], normalize))
 credit_norm <- cbind(credit_norm, default=credit$default)
 
 # 문제 1-4
