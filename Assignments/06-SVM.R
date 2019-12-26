@@ -42,8 +42,8 @@ credit_test <- credit_norm[6001:10000, -c(1)]
 
 # 문제 1-6
 # 데이터 다시 만들기  
-credit_train$default <- credit_rand[1:6000, 25]
-credit_test$default <- credit_rand[6001:10000, 25]
+credit_train <- cbind(credit_train, default=credit_rand[1:6000, 25])
+credit_test <- cbind(credit_train, default=credit_rand[6001:10000, 25])
 
 
 ##########################################################
